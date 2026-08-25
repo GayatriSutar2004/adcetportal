@@ -1,63 +1,128 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import logo from "../assets/adcet-logo.png";
 
 function Navbar() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const tickerItems = [
+    "Admissions Open for Academic Year 2026–27",
+    "ADCET Hackathon 2026 – Season 3 (Sustainable Development Goals)",
+    "AICTE Scholarship / Fellowship Schemes available",
+    "ADCET Alumni Database Update Form",
+    "Fee Approval Proposal for Academic Year 2026–2027 released",
+  ];
+
   return (
     <header>
       {/* Top Utility Links Bar */}
-      <div className="top-utility-bar">
-        <span>DTE Code: 06283</span>
-        <div>
-          <a href="#videos">Videos</a>
-          <a href="#grievance">Online Grievance</a>
-          <a href="#achievements">Achievements</a>
-          <a href="#press">Press Media</a>
-          <a href="#incubation">Incubation</a>
+      <div className="top-bar">
+        <div className="container top-bar-content">
+          <span>DTE Code: 06283</span>
+          <div className="top-links">
+            <a href="#">Videos</a>
+            <a href="#">Online Grievance</a>
+            <a href="#">Achievements</a>
+            <a href="#">Press Media</a>
+            <a href="#">Incubation</a>
+            <a href="#">Audit Report</a>
+          </div>
         </div>
       </div>
 
       {/* Main Branding Header */}
-      <div className="brand-header">
-        <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-          <div style={{ fontSize: "36px", color: "#1e3a8a" }}>🏛️</div>
-          <div className="brand-info">
-            <h3>Sant Dnyaneshwar Shikshan Sanstha's</h3>
-            <h1>Annasaheb Dange College of Engineering and Technology (ADCET), Ashta</h1>
-            <p>An Empowered Autonomous Institute | Affiliated to Shivaji University | NAAC 'A++' Grade</p>
+      <div className="main-header">
+        <div className="container header-content">
+          <div className="brand">
+            <img src={logo} alt="ADCET Logo" className="logo-img" />
+            <div className="brand-text">
+              <p>Sant Dnyaneshwar Shikshan Sanstha's</p>
+              <h1>
+                Annasaheb Dange College of Engineering
+                <br />
+                and Technology, Ashta
+              </h1>
+              <span>
+                An Empowered Autonomous Institute • Affiliated to Shivaji
+                University, Kolhapur
+              </span>
+            </div>
           </div>
-        </div>
-        <div style={{ textAlign: "right" }}>
-          <h2 style={{ color: "#0284c7", fontWeight: "900" }}>ADCET</h2>
+
+          <div className="accreditation">
+            <div>
+              <strong>NAAC</strong>
+              <span>A++ Grade</span>
+            </div>
+            <div>
+              <strong>NBA</strong>
+              <span>Accredited</span>
+            </div>
+            <div>
+              <strong>AICTE</strong>
+              <span>Approved</span>
+            </div>
+            <div>
+              <strong>ISO</strong>
+              <span>9001:2015</span>
+            </div>
+            <div>
+              <strong>Autonomous</strong>
+              <span>Institute</span>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Main Navigation Menu */}
-      <nav className="main-navbar">
-        <Link to="/">HOME</Link>
-        <Link to="/about">ABOUT US</Link>
-        <Link to="/admissions">ADMISSION</Link>
-        <Link to="/courses">DEPARTMENTS</Link>
-        <Link to="/faculty">FACULTY</Link>
-        <Link to="/notices">NOTICES</Link>
-        <Link to="/faq">FAQ</Link>
-        <Link to="/contact">CONTACT</Link>
+      <nav className="navbar">
+        <div className="container nav-content">
+          <button
+            className="menu-button"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            ☰ Menu
+          </button>
+          <div className={`nav-links ${menuOpen ? "active" : ""}`}>
+            <Link to="/">HOME</Link>
+            <Link to="/about">ABOUT US</Link>
+            <Link to="/admissions">ADMISSION</Link>
+            <Link to="/courses">DEPARTMENTS</Link>
+            <Link to="/faculty">FACULTY</Link>
+            <Link to="/notices">NOTICES</Link>
+            <Link to="/faq">FAQ</Link>
+            <Link to="/contact">CONTACT</Link>
+          </div>
+        </div>
       </nav>
 
       {/* Secondary Quick Links Bar */}
       <div className="sub-nav">
-        <a href="#news">All News</a> |
-        <a href="#approval">AICTE Approvals</a> |
-        <a href="#nirf">NIRF</a> |
-        <a href="#status">Accreditation Status</a> |
-        <a href="#rti">RTI</a> |
-        <a href="#alumni">Alumni</a> |
-        <a href="#erp" style={{ color: "#fde047", fontWeight: "bold" }}>ERP Login</a>
+        <div className="container sub-nav-inner">
+          <a href="#">All News</a>
+          <a href="#">AICTE Approvals</a>
+          <a href="#">NIRF</a>
+          <a href="#">Accreditation Status</a>
+          <a href="#">RTI</a>
+          <a href="#">Alumni</a>
+          <a href="#" className="erp">ERP Login</a>
+        </div>
       </div>
 
       {/* Live News Ticker */}
-      <div className="news-ticker">
-        <div className="news-badge">LATEST NEWS 📢</div>
-        <div className="ticker-text">
-          ADCET Hackathon 2026 – Season 3 (Sustainable Development Goals) | Admissions Open for Academic Year 2026-27 | Scholarship Forms Available
+      <div className="news-bar">
+        <div className="container news-content">
+          <div className="news-title">LATEST NEWS</div>
+          <div className="news-items">
+            <div className="news-track">
+              {tickerItems.map((item, i) => (
+                <span key={i}>● {item}</span>
+              ))}
+              {tickerItems.map((item, i) => (
+                <span key={`r-${i}`}>● {item}</span>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </header>

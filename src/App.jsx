@@ -13,6 +13,7 @@ import Notices from "./pages/Notices";
 import FAQ from "./pages/FAQ";
 import Contact from "./pages/Contact";
 
+import "./App.css";
 function App() {
   return (
     <BrowserRouter>
@@ -30,7 +31,7 @@ function App() {
       </Routes>
 
       <Footer />
-      
+
       {/* Floating Assistant Widget */}
       <AIAssistant />
     </BrowserRouter>
