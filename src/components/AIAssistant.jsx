@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-// Point this at your deployed Python backend (see deploy steps in chat).
-const API_URL = "https://backend-ai-csuc.onrender.com";
-const API_BASE = API_URL.replace(/\/$/, "");
+// Same-origin: the AI endpoint ships as a Vercel Python function in api/ask.py.
+const API_URL = "";
+const API_BASE = API_URL ? API_URL.replace(/\/$/, "") : ""; // "" -> call /api/ask on this same origin
 
 const LOADING_TEXT = "…";
 
@@ -24,7 +24,7 @@ function AIAssistant() {
     setMessages((prev) => [...prev, { text: LOADING_TEXT, sender: "bot", pending: true }]);
 
     try {
-      const res = await fetch(`${API_BASE}/ask`, {
+      const res = await fetch(`${API_BASE}/api/ask`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question })
