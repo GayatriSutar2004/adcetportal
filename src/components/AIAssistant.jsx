@@ -1,26 +1,57 @@
 import { useState } from "react";
 
+// Point this at your deployed Python backend (see deploy steps in chat).
+const API_URL = "https://YOUR-BACKEND-URL.onrender.com";
+const API_BASE = API_URL.replace(/\/$/, "");
+
+const LOADING_TEXT = "…";
+
 function AIAssistant() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     { text: "Hi! I'm ADCET AI Assistant. How can I help you today?", sender: "bot" }
   ]);
   const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSend = () => {
-    if (!input.trim()) return;
-    
-    const newMessages = [...messages, { text: input, sender: "user" }];
-    setMessages(newMessages);
+  const handleSend = async () => {
+    const question = input.trim();
+    if (!question || isLoading) return;
+
+    setMessages((prev) => [...prev, { text: question, sender: "user" }]);
     setInput("");
+    setIsLoading(true);
+    setMessages((prev) => [...prev, { text: LOADING_TEXT, sender: "bot", pending: true }]);
 
-    // Simulate AI response
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        { text: "Thank you for asking! For detailed assistance, check our Notices or Admissions page.", sender: "bot" }
-      ]);
-    }, 800);
+    try {
+      const res = await fetch(`${API_BASE}/ask`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question })
+      });
+
+      if (!res.ok) throw new Error("Server error");
+
+      const data = await res.json();
+
+      setMessages((prev) =>
+        prev.map((m) => (m.pending ? { ...m, pending: false, text: data.answer } : m))
+      );
+    } catch (err) {
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.pending
+            ? {
+                ...m,
+                pending: false,
+                text: "Sorry, the AI service is temporarily unavailable. Please try again later."
+              }
+            : m
+        )
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -51,10 +82,11 @@ function AIAssistant() {
                     padding: "6px 12px",
                     borderRadius: "12px",
                     display: "inline-block",
-                    maxWidth: "80%"
+                    maxWidth: "80%",
+                    opacity: msg.pending ? 0.6 : 1
                   }}
                 >
-                  {msg.text}
+                  {msg.text === LOADING_TEXT ? "ADCET AI is thinking…" : msg.text}
                 </span>
               </div>
             ))}
@@ -66,8 +98,9 @@ function AIAssistant() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSend()}
+              disabled={isLoading}
             />
-            <button onClick={handleSend}>Send</button>
+            <button onClick={handleSend} disabled={isLoading}>Send</button>
           </div>
         </div>
       )}
