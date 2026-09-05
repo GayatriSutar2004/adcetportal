@@ -1,6 +1,7 @@
 {
     "functions": {
         "api/ask.py": {
+            "runtime": "@vercel/python",
             "maxDuration": 10
         }
     },
