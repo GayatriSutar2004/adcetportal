@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 // Point this at your deployed Python backend (see deploy steps in chat).
-const API_URL = "https://YOUR-BACKEND-URL.onrender.com";
+const API_URL = "https://backend-ai-csuc.onrender.com";
 const API_BASE = API_URL.replace(/\/$/, "");
 
 const LOADING_TEXT = "…";
