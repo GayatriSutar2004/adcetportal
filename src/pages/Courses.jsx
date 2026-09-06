@@ -58,7 +58,7 @@ function Courses() {
   const otherCourses = [
     {
       name: "Bachelor of Business Administration (BBA)",
-      intake: "60",
+      intake: "900",
       year: "2024",
     },
     {
