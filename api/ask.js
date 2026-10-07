@@ -8,7 +8,10 @@ const vectors = JSON.parse(
 );
 
 const EMBED_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent?key=";
-const GEN_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=";
+
+// Primary first; automatic fallback when the primary is unavailable (Google outages).
+const GEN_MODELS = ["gemini-3.6-flash", "gemini-3.5-flash-lite"];
+const GEN_TIMEOUT_MS = 20000;
 
 const ANSWER_PROMPT = `You are the AI answer engine for an Adaptive Knowledge
 Lifecycle Management (AKLM) system. Answer the user's question using ONLY the
@@ -47,6 +50,47 @@ async function postJSON(url, payload) {
   });
   if (!res.ok) throw new Error(`Gemini API ${res.status}`);
   return res.json();
+}
+
+async function generateWithFallback(apiKey, prompt) {
+  let lastError = new Error("no model attempted");
+  for (const model of GEN_MODELS) {
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), GEN_TIMEOUT_MS);
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
+          signal: controller.signal,
+        }
+      );
+      clearTimeout(timer);
+      if (!res.ok) {
+        lastError = new Error(`${model} HTTP ${res.status}`);
+        console.warn(`generate failed (${lastError.message}), trying fallback`);
+        continue;
+      }
+      const data = await res.json();
+      const text =
+        (data.candidates &&
+          data.candidates[0] &&
+          data.candidates[0].content &&
+          data.candidates[0].content.parts
+            .map((p) => p.text || "")
+            .join("")) ||
+        "";
+      if (text.trim()) return text.trim();
+      lastError = new Error(`${model} returned empty text`);
+      console.warn(`generate empty (${model}), trying fallback`);
+    } catch (e) {
+      lastError = e;
+      console.warn(`generate error (${model}): ${e.message || e}, trying fallback`);
+    }
+  }
+  throw lastError;
 }
 
 export default async function handler(req, res) {
@@ -91,21 +135,10 @@ export default async function handler(req, res) {
 
     const prompt = ANSWER_PROMPT.replace("{question}", question).replace("{context}", context);
 
-    const gen = await postJSON(GEN_URL + key, {
-      contents: [{ parts: [{ text: prompt }] }],
-    });
-
-    const answer =
-      (gen.candidates &&
-        gen.candidates[0] &&
-        gen.candidates[0].content &&
-        gen.candidates[0].content.parts
-          .map((p) => p.text || "")
-          .join("")) ||
-      "I couldn't generate an answer.";
+    const answer = await generateWithFallback(key, prompt);
 
     return res.status(200).json({
-      answer: answer.trim(),
+      answer,
       sources: top.map((r) => ({
         chunk_id: r.v.id,
         source_url: r.v.source_url,
