@@ -15,7 +15,7 @@ function Courses() {
     },
     {
       name: "Electrical Engineering",
-      intake: "120",
+      intake: "420",
       year: "2004",
     },
     {
