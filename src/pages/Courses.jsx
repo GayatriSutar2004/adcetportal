@@ -15,7 +15,7 @@ function Courses() {
     },
     {
       name: "Electrical Engineering",
-      intake: "420",
+      intake: "120",
       year: "2004",
     },
     {
@@ -58,7 +58,7 @@ function Courses() {
   const otherCourses = [
     {
       name: "Bachelor of Business Administration (BBA)",
-      intake: "900",
+      intake: "200",
       year: "2024",
     },
     {
