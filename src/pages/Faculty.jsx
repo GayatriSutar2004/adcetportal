@@ -56,7 +56,7 @@ function Faculty() {
           experience: "4 Years",
         },
         {
-          name: "Mr. Gaurav Ashok Ghodake",
+          name: "Miss. Gayatri Suresh Sutar",
           designation: "Assistant Professor",
           qualification: "M.Tech (CSE)",
           expertise: "DBMS, C, Java, Computer Networks, IOT",
