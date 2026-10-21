@@ -7,7 +7,7 @@ function Faculty() {
       name: "Computer Science & Engineering",
       faculty: [
         {
-          name: "Dr. Suhel S. Sayyad",
+          name: "Dr. Harshal Sutar",
           designation: "Professor & Head of Department",
           qualification: "B.E. (Computer Science), M.Tech. (Computer Science), Ph.D.",
           expertise: "Information Security, High Performance Computing",
