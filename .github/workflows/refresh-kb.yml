@@ -1,0 +1,62 @@
+name: Refresh knowledge index
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "api/vectors.json"
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: refresh-kb
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout site repo
+        uses: actions/checkout@v4
+
+      - name: Checkout pipeline repo
+        uses: actions/checkout@v4
+        with:
+          repository: GayatriSutar2004/aklm-prototype-
+          path: pipeline
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install pipeline dependencies
+        run: pip install -r pipeline/requirements.txt
+
+      - name: Wait for Vercel deploy
+        run: sleep 60
+
+      - name: Run AKLM pipeline (crawl, embed, store to Qdrant Cloud, sync live)
+        working-directory: pipeline
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+          QDRANT_URL: ${{ secrets.QDRANT_URL }}
+          QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
+          SITE_URL: https://adcetportal.vercel.app/
+          ADCETPORTAL_REPO: ${{ github.workspace }}
+        run: python run_pipeline.py --mode update --sync-live --no-push
+
+      - name: Push refreshed vectors.json
+        working-directory: ${{ github.workspace }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add api/vectors.json
+          if git diff --cached --quiet; then
+            echo "No vector changes; nothing to push."
+          else
+            git commit -m "Auto-refresh knowledge index"
+            git push
+          fi
