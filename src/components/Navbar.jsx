@@ -105,7 +105,6 @@ function Navbar() {
           <a href="#">Accreditation Status</a>
           <a href="#">RTI</a>
           <a href="#">Alumni</a>
-          <a href="#" className="erp">ERP Login</a>
         </div>
       </div>
 
