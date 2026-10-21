@@ -7,7 +7,7 @@ function Faculty() {
       name: "Computer Science & Engineering",
       faculty: [
         {
-          name: "Dr. Suhel S. Sayyad",
+          name: "Dr. Suhani S. Sayyad",
           designation: "Professor & Head of Department",
           qualification: "B.E., M.Tech. (CSE), Ph.D.",
           expertise: "Information Security, High Performance Computing",
