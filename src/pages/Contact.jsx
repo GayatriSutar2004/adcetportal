@@ -26,7 +26,7 @@ function Contact() {
               <br />
               Ashta, Dist. Sangli,
               <br />
-              Maharashtra - Pincode- 416 311
+              Maharashtra - Pincode- 416 301
             </p>
           </div>
 
