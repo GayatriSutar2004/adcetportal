@@ -20,12 +20,7 @@ function Navbar() {
         <div className="container top-bar-content">
           <span>DTE Code: 06283</span>
           <div className="top-links">
-            <a href="#">Videos</a>
-            <a href="#">Online Grievance</a>
-            <a href="#">Achievements</a>
-            <a href="#">Press Media</a>
-            <a href="#">Incubation</a>
-            <a href="#">Audit Report</a>
+            
           </div>
         </div>
       </div>
@@ -99,12 +94,7 @@ function Navbar() {
       {/* Secondary Quick Links Bar */}
       <div className="sub-nav">
         <div className="container sub-nav-inner">
-          <a href="#">All News</a>
-          <a href="#">AICTE Approvals</a>
-          <a href="#">NIRF</a>
-          <a href="#">Accreditation Status</a>
-          <a href="#">RTI</a>
-          <a href="#">Alumni</a>
+          
         </div>
       </div>
 
