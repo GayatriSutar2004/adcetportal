@@ -42,7 +42,7 @@ function Contact() {
             <div className="contact-icon">✉️</div>
             <h3>Email</h3>
             <p>
-              <a href="mailto:director@adcet.in">director@adcet.in</a>
+              <a href="mailto:director@adcet.in">directoradcet@adcet.in</a>
             </p>
           </div>
 
