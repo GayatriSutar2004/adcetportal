@@ -5,7 +5,7 @@ function Courses() {
   const undergraduateCourses = [
     {
       name: "Mechanical Engineering",
-      intake: "120",
+      intake: "400",
       year: "1999",
     },
     {
